@@ -1,0 +1,230 @@
+{
+  "name": "music-prompt-v1",
+  "fields": [
+    {
+      "id": "concept",
+      "label": "コンセプト",
+      "type": "textarea",
+      "rows": 3,
+      "default": "Late-night city drive with a quiet sense of hope",
+      "placeholder": "曲のテーマや情景"
+    },
+    {
+      "id": "genre",
+      "label": "ジャンル",
+      "type": "text",
+      "default": "city pop, synthwave",
+      "placeholder": "city pop, lo-fi, ambient..."
+    },
+    {
+      "id": "mood",
+      "label": "ムード",
+      "type": "text",
+      "default": "nostalgic, glossy, warm, uplifting",
+      "placeholder": "calm, dark, playful..."
+    },
+    {
+      "id": "tempo",
+      "label": "テンポ",
+      "type": "select",
+      "default": "mid tempo, 104 BPM",
+      "options": [
+        "slow, 72 BPM",
+        "mid tempo, 92 BPM",
+        "mid tempo, 104 BPM",
+        "upbeat, 124 BPM",
+        "fast, 145 BPM"
+      ]
+    },
+    {
+      "id": "duration",
+      "label": "長さ",
+      "type": "select",
+      "default": "about 90 seconds",
+      "options": [
+        "about 30 seconds",
+        "about 60 seconds",
+        "about 90 seconds",
+        "about 2 minutes",
+        "full song length"
+      ]
+    },
+    {
+      "id": "structure",
+      "label": "構成",
+      "type": "select",
+      "default": "intro, verse, chorus, bridge, final chorus",
+      "options": [
+        "short intro, main loop, subtle outro",
+        "intro, verse, chorus, bridge, final chorus",
+        "A section, B section, dynamic return",
+        "cinematic build, peak, quiet ending",
+        "DJ-friendly intro, drop, breakdown, second drop"
+      ]
+    },
+    {
+      "id": "instruments",
+      "label": "楽器",
+      "type": "multiselect",
+      "default": [
+        "electric piano",
+        "analog synth pads",
+        "clean electric guitar",
+        "groovy bass",
+        "tight drum machine"
+      ],
+      "options": [
+        "electric piano",
+        "analog synth pads",
+        "clean electric guitar",
+        "acoustic guitar",
+        "groovy bass",
+        "tight drum machine",
+        "live drums",
+        "strings",
+        "brass stabs",
+        "ambient textures"
+      ]
+    },
+    {
+      "id": "vocal",
+      "label": "ボーカル",
+      "type": "select",
+      "default": "no vocal, instrumental",
+      "options": [
+        "no vocal, instrumental",
+        "soft female vocal",
+        "clear male vocal",
+        "airy vocal chops",
+        "small choir harmonies"
+      ]
+    },
+    {
+      "id": "lyrics_direction",
+      "label": "歌詞の方向性",
+      "type": "textarea",
+      "rows": 3,
+      "default": "If vocals are used, write concise Japanese lyrics about neon reflections, distance, and a promise that still feels possible.",
+      "placeholder": "歌詞テーマ、言語、避けたい表現"
+    },
+    {
+      "id": "mix_direction",
+      "label": "ミックス",
+      "type": "textarea",
+      "rows": 3,
+      "default": "Polished stereo mix, punchy low end, smooth high frequencies, wide pads, clear lead elements, no harshness.",
+      "placeholder": "音質、定位、質感"
+    },
+    {
+      "id": "avoid",
+      "label": "避ける要素",
+      "type": "textarea",
+      "rows": 3,
+      "default": "muddy low end, distorted vocals, abrupt transitions, overly busy arrangement, comedic sound effects",
+      "placeholder": "入れたくない音や雰囲気"
+    },
+    {
+      "id": "output_format",
+      "label": "出力形式",
+      "type": "select",
+      "default": "one polished prompt only",
+      "options": [
+        "one polished prompt only",
+        "prompt plus negative prompt",
+        "three prompt variations",
+        "short prompt under 600 characters"
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "id": "city-night",
+      "label": "City Night",
+      "description": "夜景、シンセ、グルーヴ",
+      "values": {
+        "concept": "Late-night city drive with a quiet sense of hope",
+        "genre": "city pop, synthwave",
+        "mood": "nostalgic, glossy, warm, uplifting",
+        "tempo": "mid tempo, 104 BPM",
+        "duration": "about 90 seconds",
+        "structure": "intro, verse, chorus, bridge, final chorus",
+        "instruments": [
+          "electric piano",
+          "analog synth pads",
+          "clean electric guitar",
+          "groovy bass",
+          "tight drum machine"
+        ],
+        "vocal": "no vocal, instrumental"
+      }
+    },
+    {
+      "id": "lofi-study",
+      "label": "Lo-fi Study",
+      "description": "小さめ、落ち着き、ループ",
+      "values": {
+        "concept": "A quiet study desk on a rainy afternoon",
+        "genre": "lo-fi hip hop, chillhop",
+        "mood": "calm, dusty, intimate, focused",
+        "tempo": "slow, 72 BPM",
+        "duration": "about 60 seconds",
+        "structure": "short intro, main loop, subtle outro",
+        "instruments": [
+          "electric piano",
+          "acoustic guitar",
+          "groovy bass",
+          "ambient textures"
+        ],
+        "vocal": "no vocal, instrumental",
+        "mix_direction": "Warm tape texture, soft transients, rounded bass, gentle vinyl noise, relaxed stereo image.",
+        "avoid": "sharp snares, dramatic risers, busy melodies, bright EDM synths"
+      }
+    },
+    {
+      "id": "cinematic",
+      "label": "Cinematic",
+      "description": "映像的、ビルド、余韻",
+      "values": {
+        "concept": "A final sunrise after a long journey",
+        "genre": "cinematic orchestral, ambient electronic",
+        "mood": "expansive, emotional, brave, luminous",
+        "tempo": "mid tempo, 92 BPM",
+        "duration": "about 2 minutes",
+        "structure": "cinematic build, peak, quiet ending",
+        "instruments": [
+          "strings",
+          "analog synth pads",
+          "live drums",
+          "brass stabs",
+          "ambient textures"
+        ],
+        "vocal": "small choir harmonies",
+        "mix_direction": "Wide cinematic image, deep but controlled percussion, expressive strings, gradual automation, clear emotional peak.",
+        "avoid": "trailer hit overload, synthetic choir artifacts, muddy reverb tail"
+      }
+    },
+    {
+      "id": "dance-drop",
+      "label": "Dance Drop",
+      "description": "クラブ、低音、展開",
+      "values": {
+        "concept": "A bright festival set that lifts the room at midnight",
+        "genre": "melodic house, future dance",
+        "mood": "euphoric, sleek, energetic, bright",
+        "tempo": "upbeat, 124 BPM",
+        "duration": "full song length",
+        "structure": "DJ-friendly intro, drop, breakdown, second drop",
+        "instruments": [
+          "analog synth pads",
+          "groovy bass",
+          "tight drum machine",
+          "ambient textures"
+        ],
+        "vocal": "airy vocal chops",
+        "mix_direction": "Club-ready low end, crisp percussion, wide supersaw layers, strong sidechain movement, clean drop impact.",
+        "avoid": "thin kick, harsh synth highs, random fills, weak transition into the drop"
+      }
+    }
+  ],
+  "template": "Create a music generation prompt with the following direction.\n\nConcept: {{concept}}\nGenre: {{genre}}\nMood: {{mood}}\nTempo: {{tempo}}\nLength: {{duration}}\nStructure: {{structure}}\nInstrumentation: {{instruments}}\nVocal direction: {{vocal}}\nLyrics direction: {{lyrics_direction}}\nMix direction: {{mix_direction}}\nAvoid: {{avoid}}\nOutput format: {{output_format}}\n\nWrite the final prompt in clear, concrete musical language. Prioritize arrangement, tone, instrumentation, rhythm, and mix texture. Keep it practical for an AI music generator."
+}
