@@ -13,12 +13,13 @@ JSONに保存した音楽スタイルを選ぶと、歌詞生成用プロンプ�
 ├── js/
 │   └── app.js
 └── json/
-    └── prompts.json
+    ├── prompts.json
+    └── prompts_ja.json
 ```
 
 ## JSON
 
-編集するファイルは `json/prompts.json` です。
+インド音楽タブは `json/prompts.json`、日本音楽タブは `json/prompts_ja.json` を読み込みます。
 
 ```json
 {
@@ -35,6 +36,8 @@ JSONに保存した音楽スタイルを選ぶと、歌詞生成用プロンプ�
 ```
 
 一覧には `title_ja` と `description_ja` を表示します。`title` は英語名の保管用で、画面では使用しません。スタイルを選択すると、歌詞生成用プロンプトには `prompt` の下に固定の日本語指示文を追加したテキストを生成します。Suno用プロンプトには `prompt` をそのまま表示します。
+
+日本音楽タブでは、歌のタイトル入力欄、曲の長さ、テーマ入力欄の内容を歌詞生成用プロンプトに差し込みます。
 
 ## GitHub Pages
 

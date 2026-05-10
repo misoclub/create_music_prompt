@@ -1,5 +1,3 @@
-const CONFIG_URL = "./json/prompts.json";
-
 const INSTRUCTION_TEXT = `というスタイルで曲を作りたいです。
 インドで流行るような英語の歌詞を考えてください。
 2分30秒以内に収まる文章量でお願いします。
@@ -10,21 +8,60 @@ const INSTRUCTION_TEXT = `というスタイルで曲を作りたいです。
 ・タグなしの歌詞
 ・歌詞すべてのの日本語訳
 ・どんな内容の歌詞かの簡単な説明
+以上の6点を出力してください。
+あなたの感想は必要ないので、結果だけを出力してください。`;
+
+const JAPAN_INSTRUCTION_TEXT = `というスタイルで曲を作りたいです。
+日本で流行るような日本語の歌詞を考えてください。
+{{songTitleLine}}
+{{themeLine}}
+{{durationLine}}
+楽曲の生成はSunoで行います。
+・曲名
+・Sunoに渡す曲のスタイルのプロンプト
+・Sunoに渡すタグ付きの歌詞
+・タグなしの歌詞
+・どんな内容の歌詞かの簡単な説明
 以上の5点を出力してください。
 あなたの感想は必要ないので、結果だけを出力してください。`;
 
+const PROMPT_SOURCES = [
+  {
+    id: "india",
+    label: "インド音楽",
+    url: "./json/prompts.json",
+    instructionText: INSTRUCTION_TEXT,
+  },
+  {
+    id: "japan",
+    label: "日本音楽",
+    url: "./json/prompts_ja.json",
+    instructionText: JAPAN_INSTRUCTION_TEXT,
+  },
+];
+
 const state = {
+  activeSourceId: PROMPT_SOURCES[0].id,
   styles: [],
   selectedIndex: 0,
+  japanSongTitle: "",
+  japanTheme: "",
+  japanDurationMinutes: "3",
 };
 
 const elements = {
+  sourceTabs: document.querySelectorAll("[data-prompt-source]"),
+  japanOptions: document.querySelector("#japanOptions"),
+  songTitleInput: document.querySelector("#songTitleInput"),
+  durationSelect: document.querySelector("#durationSelect"),
+  themeInput: document.querySelector("#themeInput"),
   styleCount: document.querySelector("#styleCount"),
   styleList: document.querySelector("#styleList"),
   mobileStyleDetails: document.querySelector("#mobileStyleDetails"),
   mobileStyleOptions: document.querySelector("#mobileStyleOptions"),
   mobileSelectedTitle: document.querySelector("#mobileSelectedTitle"),
   mobileSelectedDescription: document.querySelector("#mobileSelectedDescription"),
+  mobileSelectedInspired: document.querySelector("#mobileSelectedInspired"),
   selectedTitle: document.querySelector("#selectedTitle"),
   lyricsPromptOutput: document.querySelector("#lyricsPromptOutput"),
   sunoPromptOutput: document.querySelector("#sunoPromptOutput"),
@@ -37,7 +74,8 @@ async function loadStyles() {
   showLoading();
 
   try {
-    const response = await fetch(`${CONFIG_URL}?v=${Date.now()}`, {
+    const source = getActiveSource();
+    const response = await fetch(`${source.url}?v=${Date.now()}`, {
       cache: "no-store",
     });
 
@@ -49,8 +87,9 @@ async function loadStyles() {
     validateConfig(config);
     state.styles = config.styles;
     state.selectedIndex = 0;
+    renderSourceTabs();
     render();
-    setStatus("JSONを読み込みました。", "success");
+    setStatus(`${source.label}のJSONを読み込みました。`, "success");
   } catch (error) {
     showError(error.message);
   }
@@ -74,9 +113,17 @@ function validateConfig(config) {
 
 function render() {
   elements.styleCount.textContent = `${state.styles.length}件`;
+  renderThemeField();
   renderStyleList();
   renderMobileStyleOptions();
   updateOutput();
+}
+
+function renderThemeField() {
+  elements.japanOptions.hidden = state.activeSourceId !== "japan";
+  elements.songTitleInput.value = state.japanSongTitle;
+  elements.durationSelect.value = state.japanDurationMinutes;
+  elements.themeInput.value = state.japanTheme;
 }
 
 function renderStyleList() {
@@ -96,7 +143,12 @@ function renderStyleList() {
     description.className = "style-description";
     description.textContent = style.description_ja ?? "";
 
+    const inspiredBy = createInspiredByElement(style, "style-inspired");
     button.append(title, description);
+    if (inspiredBy) {
+      button.append(inspiredBy);
+    }
+
     button.addEventListener("click", () => {
       selectStyle(index);
     });
@@ -122,7 +174,12 @@ function renderMobileStyleOptions() {
     description.className = "mobile-option-description";
     description.textContent = style.description_ja ?? "";
 
+    const inspiredBy = createInspiredByElement(style, "mobile-option-inspired");
     button.append(title, description);
+    if (inspiredBy) {
+      button.append(inspiredBy);
+    }
+
     button.addEventListener("click", () => {
       selectStyle(index);
       elements.mobileStyleDetails.open = false;
@@ -150,21 +207,97 @@ function updateOutput() {
     elements.selectedTitle.textContent = "";
     elements.mobileSelectedTitle.textContent = "";
     elements.mobileSelectedDescription.textContent = "";
+    elements.mobileSelectedInspired.textContent = "";
     elements.lyricsPromptOutput.value = "";
     elements.sunoPromptOutput.value = "";
     return;
   }
 
-  elements.selectedTitle.textContent = getStyleTitle(style);
+  elements.selectedTitle.textContent = getSelectedTitleLabel(style);
   elements.mobileSelectedTitle.textContent = getStyleTitle(style);
   elements.mobileSelectedDescription.textContent = style.description_ja ?? "";
-  elements.lyricsPromptOutput.value = `${style.prompt}\n\n${INSTRUCTION_TEXT}`;
+  elements.mobileSelectedInspired.textContent = getInspiredByLabel(style);
+  elements.lyricsPromptOutput.value = `${style.prompt}\n\n${getInstructionText()}`;
   elements.sunoPromptOutput.value = style.prompt;
   autoResizeTextareas();
 }
 
 function getStyleTitle(style) {
   return style.title_ja;
+}
+
+function getSelectedTitleLabel(style) {
+  const inspiredBy = getInspiredByLabel(style);
+  return inspiredBy ? `${getStyleTitle(style)} / ${inspiredBy}` : getStyleTitle(style);
+}
+
+function createInspiredByElement(style, className) {
+  const label = getInspiredByLabel(style);
+
+  if (!label) {
+    return null;
+  }
+
+  const element = document.createElement("span");
+  element.className = className;
+  element.textContent = label;
+  return element;
+}
+
+function getInspiredByLabel(style) {
+  if (state.activeSourceId !== "japan") {
+    return "";
+  }
+
+  const inspiredBy = Array.isArray(style.inspired_by)
+    ? style.inspired_by.filter(Boolean).join("、")
+    : String(style.inspired_by ?? "").trim();
+
+  return inspiredBy ? `参考: ${inspiredBy}` : "";
+}
+
+function getActiveSource() {
+  return (
+    PROMPT_SOURCES.find((source) => source.id === state.activeSourceId) ??
+    PROMPT_SOURCES[0]
+  );
+}
+
+function getInstructionText() {
+  const source = getActiveSource();
+
+  if (source.id !== "japan") {
+    return source.instructionText;
+  }
+
+  const songTitle = state.japanSongTitle.trim();
+  const theme = state.japanTheme.trim();
+  const songTitleLine = songTitle ? `歌のタイトルは「${songTitle}」にしてください。` : "";
+  const themeLine = theme ? `歌のテーマは「${theme}」です。` : "";
+  const durationLine = `なるべく${state.japanDurationMinutes}分以内に収まる文章量でお願いします。`;
+  return source.instructionText
+    .replaceAll("{{songTitleLine}}\n", songTitleLine ? `${songTitleLine}\n` : "")
+    .replaceAll("{{themeLine}}\n", themeLine ? `${themeLine}\n` : "")
+    .replaceAll("{{durationLine}}", durationLine);
+}
+
+function renderSourceTabs() {
+  elements.sourceTabs.forEach((tab) => {
+    const isActive = tab.dataset.promptSource === state.activeSourceId;
+    tab.setAttribute("aria-selected", String(isActive));
+  });
+}
+
+function selectPromptSource(sourceId) {
+  if (sourceId === state.activeSourceId) {
+    return;
+  }
+
+  state.activeSourceId = sourceId;
+  state.selectedIndex = 0;
+  elements.mobileStyleDetails.open = false;
+  renderSourceTabs();
+  loadStyles();
 }
 
 function selectStyle(index) {
@@ -202,12 +335,14 @@ async function copyPrompt(textarea, successMessage) {
 }
 
 function showLoading() {
+  renderThemeField();
   elements.styleCount.textContent = "";
   elements.styleList.innerHTML = "";
   elements.mobileStyleOptions.innerHTML = "";
   elements.styleList.append(createEmptyState("読み込み中..."));
   elements.mobileSelectedTitle.textContent = "読み込み中...";
   elements.mobileSelectedDescription.textContent = "";
+  elements.mobileSelectedInspired.textContent = "";
   elements.selectedTitle.textContent = "";
   elements.lyricsPromptOutput.value = "";
   elements.sunoPromptOutput.value = "";
@@ -216,12 +351,14 @@ function showLoading() {
 }
 
 function showError(message) {
+  renderThemeField();
   elements.styleCount.textContent = "";
   elements.styleList.innerHTML = "";
   elements.mobileStyleOptions.innerHTML = "";
   elements.styleList.append(createEmptyState("読み込み失敗"));
   elements.mobileSelectedTitle.textContent = "読み込み失敗";
   elements.mobileSelectedDescription.textContent = "";
+  elements.mobileSelectedInspired.textContent = "";
   elements.selectedTitle.textContent = "";
   elements.lyricsPromptOutput.value = message;
   elements.sunoPromptOutput.value = "";
@@ -249,4 +386,21 @@ elements.copySunoButton.addEventListener("click", () => {
 });
 elements.lyricsPromptOutput.addEventListener("input", autoResizeTextareas);
 elements.sunoPromptOutput.addEventListener("input", autoResizeTextareas);
+elements.songTitleInput.addEventListener("input", (event) => {
+  state.japanSongTitle = event.target.value;
+  updateOutput();
+});
+elements.durationSelect.addEventListener("change", (event) => {
+  state.japanDurationMinutes = event.target.value;
+  updateOutput();
+});
+elements.themeInput.addEventListener("input", (event) => {
+  state.japanTheme = event.target.value;
+  updateOutput();
+});
+elements.sourceTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    selectPromptSource(tab.dataset.promptSource);
+  });
+});
 loadStyles();

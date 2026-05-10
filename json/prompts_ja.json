@@ -1,0 +1,265 @@
+{
+  "version": "2.1",
+  "styles": [
+    {
+      "title": "City Pop Night Drive",
+      "title_ja": "シティポップ・ナイトドライブ",
+      "inspired_by": ["山下達郎", "竹内まりや", "鈴木雅之"],
+      "description_ja": "都会の夜景を感じる、大人っぽく洗練されたシティポップ。",
+      "prompt": "Japanese city pop, smooth mature male vocals, soft falsetto, stylish urban night atmosphere, groovy bassline, nostalgic 1980s production, emotional yet classy singing"
+    },
+    {
+      "title": "Anime Hero Opening",
+      "title_ja": "アニメ主人公オープニング",
+      "inspired_by": ["LiSA", "Eve", "YOASOBI"],
+      "description_ja": "疾走感と青春感がある、王道アニメ主題歌風。",
+      "prompt": "Japanese anime opening song, energetic youthful female vocals, emotional high-energy singing, fast rock-pop arrangement, uplifting chorus, cinematic anime atmosphere"
+    },
+    {
+      "title": "Emotional Band Rock",
+      "title_ja": "感情的バンドロック",
+      "inspired_by": ["ONE OK ROCK", "RADWIMPS", "UVERworld"],
+      "description_ja": "熱量の高いエモーショナルなロックサウンド。",
+      "prompt": "Japanese emotional rock band, passionate male vocals, explosive chorus, raw emotional singing, powerful guitars, live concert energy, dramatic emotional intensity"
+    },
+    {
+      "title": "Kawaii Idol Pop",
+      "title_ja": "かわいいアイドルポップ",
+      "inspired_by": ["乃木坂46", "FRUITS ZIPPER", "AKB48"],
+      "description_ja": "キラキラした可愛さ全開の女性アイドル系。",
+      "prompt": "Japanese idol pop, cute energetic female vocals, sugary sweet singing style, cheerful atmosphere, sparkling synths, catchy hooks, kawaii idol energy"
+    },
+    {
+      "title": "Dark Visual Kei",
+      "title_ja": "ダークヴィジュアル系",
+      "inspired_by": ["X JAPAN", "the GazettE", "L'Arc〜en〜Ciel"],
+      "description_ja": "耽美でドラマチックなヴィジュアル系ロック。",
+      "prompt": "Japanese visual kei rock, dramatic theatrical male vocals, dark romantic atmosphere, emotional vibrato, aggressive guitars, gothic aesthetics, explosive emotional chorus"
+    },
+    {
+      "title": "Japanese Trap Rap",
+      "title_ja": "Jトラップラップ",
+      "inspired_by": ["JP THE WAVY", "Awich", "Creepy Nuts"],
+      "description_ja": "都会的でクールな現代J-HipHop。",
+      "prompt": "Japanese trap hip hop, deep cool male rap vocals, stylish flow, heavy bass, urban Tokyo nightlife mood, confident swagger, modern trap production"
+    },
+    {
+      "title": "Elegant Piano Ballad",
+      "title_ja": "上品なピアノバラード",
+      "inspired_by": ["宇多田ヒカル", "MISIA", "JUJU"],
+      "description_ja": "透明感があり感情豊かな女性バラード。",
+      "prompt": "Japanese emotional piano ballad, elegant soulful female vocals, soft breathy singing, emotional piano accompaniment, cinematic strings, heartfelt emotional performance"
+    },
+    {
+      "title": "Summer Festival Rock",
+      "title_ja": "夏フェスロック",
+      "inspired_by": ["Mrs. GREEN APPLE", "WANIMA", "ゆず"],
+      "description_ja": "夏フェスで大合唱したくなる青春系ロック。",
+      "prompt": "Japanese summer festival rock, bright energetic male vocals, emotional crowd-singalong chorus, uplifting guitars, youthful excitement, outdoor festival atmosphere"
+    },
+    {
+      "title": "Lo-fi Tokyo Midnight",
+      "title_ja": "東京ローファイ深夜",
+      "inspired_by": ["Vaundy", "羊文学", "SIRUP"],
+      "description_ja": "夜の東京を感じるエモいローファイ系。",
+      "prompt": "Japanese lo-fi chill pop, soft whisper female vocals, dreamy late-night atmosphere, mellow beats, emotional ambient textures, intimate urban mood"
+    },
+    {
+      "title": "Traditional Enka Soul",
+      "title_ja": "魂の演歌",
+      "inspired_by": ["石川さゆり", "北島三郎", "氷川きよし"],
+      "description_ja": "日本らしい情緒を感じる伝統歌謡。",
+      "prompt": "Japanese enka style song, dramatic emotional male vocals, deep vibrato, nostalgic traditional atmosphere, heartfelt emotional delivery, classic Japanese instrumentation"
+    },
+    {
+      "title": "Shibuya-kei Pop",
+      "title_ja": "渋谷系ポップ",
+      "inspired_by": ["Pizzicato Five", "Cornelius", "capsule"],
+      "description_ja": "おしゃれで軽快な渋谷系ポップ。",
+      "prompt": "Japanese Shibuya-kei pop, stylish soft female vocals, retro fashionable atmosphere, jazzy pop groove, playful melodies, colorful Tokyo cafe vibe"
+    },
+    {
+      "title": "Hardcore Anime Metal",
+      "title_ja": "アニメメタル",
+      "inspired_by": ["BABYMETAL", "Fear, and Loathing in Las Vegas", "Ado"],
+      "description_ja": "激しく派手なアニメ系メタルサウンド。",
+      "prompt": "Japanese anime metal, aggressive powerful female vocals, screaming and melodic mix, intense guitars, chaotic high-energy atmosphere, dramatic anime battle vibe"
+    },
+    {
+      "title": "Romantic Drama OST",
+      "title_ja": "恋愛ドラマ主題歌",
+      "inspired_by": ["back number", "Official髭男dism", "King Gnu"],
+      "description_ja": "切なく感情的な恋愛ドラマ風。",
+      "prompt": "Japanese romantic drama soundtrack, emotional soft male vocals, bittersweet atmosphere, piano and strings, heartfelt love song energy, cinematic emotional build-up"
+    },
+    {
+      "title": "Cute Electro Pop",
+      "title_ja": "かわいいエレクトロポップ",
+      "inspired_by": ["Perfume", "きゃりーぱみゅぱみゅ", "CAPSULE"],
+      "description_ja": "テクノ感のあるポップでキュートなサウンド。",
+      "prompt": "Japanese electro pop, robotic cute female vocals, futuristic kawaii atmosphere, colorful synth production, catchy dance rhythm, playful electronic energy"
+    },
+    {
+      "title": "Neo Soul Japan",
+      "title_ja": "和製ネオソウル",
+      "inspired_by": ["藤井風", "SIRUP", "iri"],
+      "description_ja": "R&Bやソウルを感じる都会的サウンド。",
+      "prompt": "Japanese neo soul, smooth soulful male vocals, relaxed groove, jazzy chords, urban sophisticated mood, emotional modern R&B atmosphere"
+    },
+    {
+      "title": "Fantasy Game Ending",
+      "title_ja": "ファンタジーゲームED",
+      "inspired_by": ["supercell", "Aimer", "梶浦由記"],
+      "description_ja": "RPGのエンディングみたいな幻想的バラード。",
+      "prompt": "Japanese fantasy game ending song, ethereal emotional female vocals, cinematic orchestral atmosphere, magical ambience, soft emotional singing, epic fantasy mood"
+    },
+    {
+      "title": "Japanese Funk Groove",
+      "title_ja": "和製ファンクグルーヴ",
+      "inspired_by": ["Suchmos", "BRADIO", "Nulbarich"],
+      "description_ja": "グルーヴ重視の大人っぽいファンク。",
+      "prompt": "Japanese funk groove, cool stylish male vocals, funky bassline, danceable rhythm, mature stylish atmosphere, smooth rhythmic singing"
+    },
+    {
+      "title": "Melancholic Acoustic Folk",
+      "title_ja": "切ないアコースティックフォーク",
+      "inspired_by": ["スピッツ", "秦基博", "あいみょん"],
+      "description_ja": "素朴で温かい、切なさ重視の弾き語り系。",
+      "prompt": "Japanese acoustic folk ballad, gentle emotional male vocals, warm guitar sound, nostalgic atmosphere, heartfelt intimate singing, soft emotional storytelling"
+    },
+    {
+      "title": "Cyber Tokyo EDM",
+      "title_ja": "サイバー東京EDM",
+      "inspired_by": ["m-flo", "DAOKO", "REOL"],
+      "description_ja": "未来感のあるサイバー系EDM。",
+      "prompt": "Japanese cyber EDM, stylish energetic female vocals, futuristic Tokyo nightlife atmosphere, electronic dance production, cool digital textures, vibrant club energy"
+    },
+    {
+      "title": "Sad Rainy Night Ballad",
+      "title_ja": "雨の夜バラード",
+      "inspired_by": ["Aimer", "中島美嘉", "ヨルシカ"],
+      "description_ja": "深夜の雨を感じる、静かで切ないバラード。",
+      "prompt": "Japanese rainy night ballad, husky emotional female vocals, melancholic atmosphere, soft piano and strings, deep emotional sadness, intimate late-night feeling"
+    },
+    {
+      "title": "Mature Japanese Love Rock",
+      "title_ja": "大人の恋愛ロック",
+      "inspired_by": ["福山雅治"],
+      "description_ja": "低音の色気と爽やかさを両立した、大人っぽい日本のラブソング系。",
+      "prompt": "Japanese adult love rock, warm deep male vocals, smooth mature singing, romantic emotional atmosphere, clean electric guitar, sophisticated Japanese pop rock sound, gentle emotional delivery, night drive feeling"
+    },
+    {
+      "title": "Southern Beach Pop Rock",
+      "title_ja": "湘南ビーチポップロック",
+      "inspired_by": ["サザンオールスターズ"],
+      "description_ja": "夏・海・青春・お祭り感が混ざった、日本の国民的サマーポップ。",
+      "prompt": "Japanese summer beach pop rock, playful emotional male vocals, nostalgic seaside atmosphere, cheerful band sound, festival energy, catchy melodic hooks, tropical summer mood, emotional Japanese pop rock vibe"
+    },
+    {
+      "title": "Explosive Youth Pop Rock",
+      "title_ja": "爆発系青春ポップロック",
+      "inspired_by": ["Mrs. GREEN APPLE"],
+      "description_ja": "高音の勢いと多幸感が強い、現代J-POPど真ん中のエモい青春系。",
+      "prompt": "Japanese energetic pop rock, bright expressive male vocals, youthful emotional singing, explosive uplifting chorus, colorful modern J-pop production, emotional high notes, festival crowd energy, fast emotional transitions, vibrant band atmosphere"
+    },
+    {
+      "title": "Dark Emotional Art Pop",
+      "title_ja": "ダーク感情系アートポップ",
+      "inspired_by": ["米津玄師"],
+      "description_ja": "孤独感や退廃感を含んだ、文学的で独特な世界観のポップ。",
+      "prompt": "Japanese emotional art pop, slightly husky male vocals, melancholic emotional delivery, dark modern atmosphere, poetic lonely mood, experimental pop production, dramatic emotional tension, introspective Japanese alternative sound"
+    },
+    {
+      "title": "K-Pop Boy Group Anthem",
+      "title_ja": "K-POP男性アイドルグループ",
+      "inspired_by": ["BTS", "Stray Kids", "SEVENTEEN"],
+      "description_ja": "ダンスパフォーマンス前提の、パワフルで洗練されたK-POP男性グループ系。",
+      "prompt": "K-pop boy group anthem, energetic layered male vocals, synchronized group chants, powerful rap and singing mix, polished Korean pop production, explosive chorus, stylish dance performance atmosphere, emotional high-energy delivery, modern stadium pop sound"
+    },
+    {
+      "title": "K-Pop Girl Group Dance Pop",
+      "title_ja": "K-POP女性アイドルグループ",
+      "inspired_by": ["BLACKPINK", "TWICE", "NewJeans"],
+      "description_ja": "中毒性の高いメロディとダンス感が強い、現代K-POP女性グループ系。",
+      "prompt": "K-pop girl group dance pop, cute and confident female vocals, layered harmonies, addictive catchy hooks, stylish modern pop production, dance performance energy, trendy Korean idol atmosphere, polished vocals, fashionable youthful mood"
+    },
+    {
+      "title": "Japanese Male Idol Group Pop",
+      "title_ja": "日本男性アイドルグループ",
+      "inspired_by": ["嵐", "Snow Man", "King & Prince"],
+      "description_ja": "爽やかさ・キラキラ感・青春感を重視した、日本男性アイドルグループ系ポップ。",
+      "prompt": "Japanese male idol group pop, bright youthful male vocals, synchronized group singing, sparkling emotional atmosphere, catchy pop melodies, uplifting chorus, polished Japanese idol production, cheerful dance performance energy, emotional friendship vibe"
+    },
+    {
+      "title": "Kansai Idol Party Pop",
+      "title_ja": "関西系アイドルパーティーポップ",
+      "inspired_by": ["SUPER EIGHT", "WEST.", "なにわ男子"],
+      "description_ja": "関西ノリの明るさと親しみやすさが強い、バラエティ感のある男性アイドルポップ。",
+      "prompt": "Japanese Kansai idol pop, cheerful energetic male group vocals, playful party atmosphere, bright emotional singing, catchy upbeat melodies, fun festival energy, friendly humorous vibe, colorful Japanese idol production, lively crowd interaction feeling"
+    },
+    {
+      "title": "Japanese Festival Reggae Rock",
+      "title_ja": "お祭りレゲエロック",
+      "inspired_by": [
+        "湘南乃風",
+        "MINMI",
+        "RED SPIDER"
+      ],
+      "description_ja": "祭り感・男臭さ・仲間感が強い、日本のレゲエミクスチャー系。",
+      "prompt": "Japanese reggae rock anthem, rough powerful male vocals, aggressive party chants, festival crowd atmosphere, emotional friendship energy, heavy bass, hype summer festival vibe, energetic Japanese street sound"
+    },
+    {
+      "title": "Japanese Punk Rock",
+      "title_ja": "日本青春パンク",
+      "inspired_by": [
+        "HEY-SMITH",
+        "04 Limited Sazabys",
+        "SHANK"
+      ],
+      "description_ja": "ライブハウス感の強い、青春系メロディックパンク。",
+      "prompt": "Japanese melodic punk rock, raw youthful male vocals, fast energetic guitars, emotional live house atmosphere, shouting chorus, rebellious youth energy, festival mosh pit vibe"
+    },
+    {
+      "title": "Classic Visual Kei Anthem",
+      "title_ja": "王道ヴィジュアル系",
+      "inspired_by": [
+        "Janne Da Arc",
+        "シド",
+        "LUNA SEA"
+      ],
+      "description_ja": "耽美で色気のある、王道ヴィジュアル系ロック。",
+      "prompt": "Japanese classic visual kei rock, seductive emotional male vocals, dramatic gothic atmosphere, emotional vibrato, elegant guitar melodies, dark romantic aesthetics, theatrical emotional performance"
+    },
+    {
+      "title": "Comedy Visual Rock",
+      "title_ja": "コミカルヴィジュアルロック",
+      "inspired_by": [
+        "ゴールデンボンバー"
+      ],
+      "description_ja": "ネタ感とライブの盛り上がりを重視した、明るくバカっぽいヴィジュアル系。",
+      "prompt": "Japanese comedy visual rock, playful exaggerated male vocals, humorous party atmosphere, catchy rock chorus, energetic live crowd interaction, colorful visual kei aesthetics, chaotic fun energy"
+    },
+    {
+      "title": "Japanese Emotional Rap Pop",
+      "title_ja": "エモラップポップ",
+      "inspired_by": [
+        "Hilcrhyme",
+        "Creepy Nuts",
+        "nobodyknows+"
+      ],
+      "description_ja": "メロディとラップを混ぜた、日本独自のエモ系ラップ。",
+      "prompt": "Japanese emotional rap pop, melodic male rap vocals, sentimental emotional atmosphere, catchy chorus hooks, urban Japanese nightlife mood, emotional storytelling flow, polished pop rap production"
+    },
+    {
+      "title": "Youthful Pop Punk Anthem",
+      "title_ja": "青春ポップパンク",
+      "inspired_by": [
+        "WANIMA",
+        "MONGOL800",
+        "10-FEET"
+      ],
+      "description_ja": "友情・青春・ライブ感が爆発している日本ポップパンク。",
+      "prompt": "Japanese pop punk anthem, energetic youthful male vocals, emotional friendship themes, fast upbeat guitars, festival singalong chorus, raw live performance energy, uplifting summer vibe"
+    }
+  ]
+}

@@ -11,6 +11,27 @@
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
+    <nav class="music-tabs" aria-label="音楽タイプ" role="tablist">
+      <button
+        class="music-tab"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        data-prompt-source="india"
+      >
+        インド音楽
+      </button>
+      <button
+        class="music-tab"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        data-prompt-source="japan"
+      >
+        日本音楽
+      </button>
+    </nav>
+
     <main class="app-layout">
       <section class="styles-panel" aria-labelledby="stylesTitle">
         <div class="section-heading">
@@ -22,6 +43,7 @@
             <summary class="mobile-style-summary">
               <span class="mobile-selected-title" id="mobileSelectedTitle"></span>
               <span class="mobile-selected-description" id="mobileSelectedDescription"></span>
+              <span class="mobile-selected-inspired" id="mobileSelectedInspired"></span>
             </summary>
             <div class="mobile-style-options" id="mobileStyleOptions"></div>
           </details>
@@ -30,6 +52,34 @@
       </section>
 
       <section class="output-panel" aria-label="生成プロンプト">
+        <div class="japan-options" id="japanOptions" hidden>
+          <div class="field-control">
+            <label for="songTitleInput">歌のタイトル</label>
+            <input id="songTitleInput" type="text" placeholder="例: 雨の中の小さな声" />
+          </div>
+
+          <div class="field-control">
+            <label for="durationSelect">曲の長さ</label>
+            <select id="durationSelect" aria-label="曲の長さ">
+              <option value="1">1分以内</option>
+              <option value="2">2分以内</option>
+              <option value="3" selected>3分以内</option>
+              <option value="4">4分以内</option>
+              <option value="5">5分以内</option>
+            </select>
+          </div>
+
+          <div class="field-control">
+            <label for="themeInput">テーマ</label>
+            <textarea
+              id="themeInput"
+              rows="2"
+              placeholder="例: モラハラを受けている女の子の悲しい歌"
+            ></textarea>
+            <p class="field-help">例: モラハラを受けている女の子の悲しい歌</p>
+          </div>
+        </div>
+
         <div class="prompt-block lyrics-block">
           <div class="output-toolbar">
             <div>
