@@ -1,24 +1,39 @@
 const CONFIG_URL = "./json/prompts.json";
 
+const INSTRUCTION_TEXT = `というスタイルで曲を作りたいです。
+インドで流行るような英語の歌詞を考えてください。
+2分30秒以内に収まる文章量でお願いします。
+楽曲の生成はSunoで行います。
+・曲名
+・Sunoに渡す曲のスタイルのプロンプト
+・Sunoに渡すタグ付きの歌詞
+・タグなしの歌詞
+・歌詞すべてのの日本語訳
+・どんな内容の歌詞かの簡単な説明
+以上の5点を出力してください。
+あなたの感想は必要ないので、結果だけを出力してください。`;
+
 const state = {
-  config: null,
-  values: {},
-  activePresetId: "",
+  styles: [],
+  selectedIndex: 0,
 };
 
 const elements = {
-  configName: document.querySelector("#configName"),
-  presetGrid: document.querySelector("#presetGrid"),
-  promptForm: document.querySelector("#promptForm"),
-  promptOutput: document.querySelector("#promptOutput"),
-  promptStats: document.querySelector("#promptStats"),
+  styleCount: document.querySelector("#styleCount"),
+  styleList: document.querySelector("#styleList"),
+  mobileStyleDetails: document.querySelector("#mobileStyleDetails"),
+  mobileStyleOptions: document.querySelector("#mobileStyleOptions"),
+  mobileSelectedTitle: document.querySelector("#mobileSelectedTitle"),
+  mobileSelectedDescription: document.querySelector("#mobileSelectedDescription"),
+  selectedTitle: document.querySelector("#selectedTitle"),
+  lyricsPromptOutput: document.querySelector("#lyricsPromptOutput"),
+  sunoPromptOutput: document.querySelector("#sunoPromptOutput"),
   statusLine: document.querySelector("#statusLine"),
-  copyButton: document.querySelector("#copyButton"),
-  resetButton: document.querySelector("#resetButton"),
-  reloadButton: document.querySelector("#reloadButton"),
+  copyLyricsButton: document.querySelector("#copyLyricsButton"),
+  copySunoButton: document.querySelector("#copySunoButton"),
 };
 
-async function loadConfig() {
+async function loadStyles() {
   showLoading();
 
   try {
@@ -32,13 +47,12 @@ async function loadConfig() {
 
     const config = await response.json();
     validateConfig(config);
-    state.config = config;
-    state.activePresetId = config.presets?.[0]?.id ?? "";
-    state.values = getInitialValues(config, state.activePresetId);
+    state.styles = config.styles;
+    state.selectedIndex = 0;
     render();
     setStatus("JSONを読み込みました。", "success");
   } catch (error) {
-    showError(error);
+    showError(error.message);
   }
 }
 
@@ -47,281 +61,129 @@ function validateConfig(config) {
     throw new Error("JSONの形式が正しくありません。");
   }
 
-  if (!Array.isArray(config.fields) || config.fields.length === 0) {
-    throw new Error("fields が見つかりません。");
+  if (!Array.isArray(config.styles) || config.styles.length === 0) {
+    throw new Error("styles が見つかりません。");
   }
 
-  if (typeof config.template !== "string" || config.template.trim() === "") {
-    throw new Error("template が見つかりません。");
-  }
-}
-
-function getInitialValues(config, presetId = "") {
-  const values = {};
-
-  config.fields.forEach((field) => {
-    values[field.id] = getDefaultValue(field);
+  config.styles.forEach((style, index) => {
+    if (!style.title_ja || !style.prompt) {
+      throw new Error(`styles[${index}] に title_ja または prompt がありません。`);
+    }
   });
-
-  const preset = config.presets?.find((item) => item.id === presetId);
-  return {
-    ...values,
-    ...(preset?.values ?? {}),
-  };
-}
-
-function getDefaultValue(field) {
-  if (field.type === "multiselect") {
-    return Array.isArray(field.default) ? field.default : [];
-  }
-
-  if (field.type === "checkbox") {
-    return Boolean(field.default);
-  }
-
-  if (field.default !== undefined) {
-    return field.default;
-  }
-
-  if (Array.isArray(field.options) && field.options.length > 0) {
-    return normalizeOption(field.options[0]).value;
-  }
-
-  return "";
 }
 
 function render() {
-  const { config } = state;
-  elements.configName.textContent = config.name ?? "";
-  renderPresets();
-  renderForm();
+  elements.styleCount.textContent = `${state.styles.length}件`;
+  renderStyleList();
+  renderMobileStyleOptions();
   updateOutput();
 }
 
-function renderPresets() {
-  elements.presetGrid.innerHTML = "";
+function renderStyleList() {
+  elements.styleList.innerHTML = "";
 
-  if (!Array.isArray(state.config.presets) || state.config.presets.length === 0) {
-    elements.presetGrid.append(createEmptyState("プリセットなし"));
-    return;
-  }
-
-  state.config.presets.forEach((preset) => {
+  state.styles.forEach((style, index) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "preset-button";
-    button.dataset.presetId = preset.id;
-    button.setAttribute("aria-pressed", String(preset.id === state.activePresetId));
+    button.className = "style-button";
+    button.setAttribute("aria-pressed", String(index === state.selectedIndex));
 
     const title = document.createElement("span");
-    title.className = "preset-title";
-    title.textContent = preset.label ?? preset.id;
+    title.className = "style-title";
+    title.textContent = getStyleTitle(style);
 
     const description = document.createElement("span");
-    description.className = "preset-description";
-    description.textContent = preset.description ?? "";
+    description.className = "style-description";
+    description.textContent = style.description_ja ?? "";
 
     button.append(title, description);
     button.addEventListener("click", () => {
-      state.activePresetId = preset.id;
-      state.values = getInitialValues(state.config, preset.id);
-      render();
-      setStatus(`${preset.label ?? "プリセット"}を反映しました。`, "success");
+      selectStyle(index);
     });
 
-    elements.presetGrid.append(button);
+    elements.styleList.append(button);
   });
 }
 
-function renderForm() {
-  elements.promptForm.innerHTML = "";
+function renderMobileStyleOptions() {
+  elements.mobileStyleOptions.innerHTML = "";
 
-  state.config.fields.forEach((field) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "field";
-    wrapper.dataset.fieldId = field.id;
+  state.styles.forEach((style, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "mobile-style-option";
+    button.setAttribute("aria-pressed", String(index === state.selectedIndex));
 
-    if (field.type === "multiselect") {
-      wrapper.append(createLegend(field));
-      wrapper.append(createMultiSelect(field));
-    } else if (field.type === "checkbox") {
-      wrapper.append(createCheckbox(field));
-    } else {
-      wrapper.append(createLabel(field));
-      wrapper.append(createInput(field));
-    }
+    const title = document.createElement("span");
+    title.className = "mobile-option-title";
+    title.textContent = getStyleTitle(style);
 
-    if (field.help) {
-      const help = document.createElement("p");
-      help.className = "field-help";
-      help.textContent = field.help;
-      wrapper.append(help);
-    }
+    const description = document.createElement("span");
+    description.className = "mobile-option-description";
+    description.textContent = style.description_ja ?? "";
 
-    elements.promptForm.append(wrapper);
-  });
-}
-
-function createLabel(field) {
-  const label = document.createElement("label");
-  label.htmlFor = field.id;
-  label.textContent = field.label ?? field.id;
-  return label;
-}
-
-function createLegend(field) {
-  const legend = document.createElement("span");
-  legend.className = "field-label";
-  legend.textContent = field.label ?? field.id;
-  return legend;
-}
-
-function createInput(field) {
-  const value = state.values[field.id] ?? "";
-  let input;
-
-  if (field.type === "textarea") {
-    input = document.createElement("textarea");
-    input.rows = field.rows ?? 4;
-  } else if (field.type === "select") {
-    input = document.createElement("select");
-    field.options?.forEach((option) => {
-      const normalized = normalizeOption(option);
-      const optionElement = document.createElement("option");
-      optionElement.value = normalized.value;
-      optionElement.textContent = normalized.label;
-      input.append(optionElement);
-    });
-  } else {
-    input = document.createElement("input");
-    input.type = field.type === "number" ? "number" : "text";
-    if (field.min !== undefined) input.min = field.min;
-    if (field.max !== undefined) input.max = field.max;
-    if (field.step !== undefined) input.step = field.step;
-  }
-
-  input.id = field.id;
-  input.name = field.id;
-  input.value = value;
-  input.placeholder = field.placeholder ?? "";
-  input.addEventListener("input", (event) => {
-    state.values[field.id] = event.target.value;
-    state.activePresetId = "";
-    updatePresetState();
-    updateOutput();
-  });
-
-  return input;
-}
-
-function createCheckbox(field) {
-  const label = document.createElement("label");
-  label.className = "checkbox-pill";
-
-  const input = document.createElement("input");
-  input.id = field.id;
-  input.name = field.id;
-  input.type = "checkbox";
-  input.checked = Boolean(state.values[field.id]);
-  input.addEventListener("change", (event) => {
-    state.values[field.id] = event.target.checked;
-    state.activePresetId = "";
-    updatePresetState();
-    updateOutput();
-  });
-
-  const labelText = document.createElement("span");
-  labelText.textContent = field.label ?? field.id;
-  label.append(input, labelText);
-  return label;
-}
-
-function createMultiSelect(field) {
-  const fieldset = document.createElement("fieldset");
-  fieldset.className = "option-list";
-
-  field.options?.forEach((option) => {
-    const normalized = normalizeOption(option);
-    const label = document.createElement("label");
-    label.className = "checkbox-pill";
-
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.name = field.id;
-    input.value = normalized.value;
-    input.checked = Array.isArray(state.values[field.id])
-      ? state.values[field.id].includes(normalized.value)
-      : false;
-    input.addEventListener("change", () => {
-      state.values[field.id] = Array.from(
-        fieldset.querySelectorAll("input:checked"),
-      ).map((item) => item.value);
-      state.activePresetId = "";
-      updatePresetState();
-      updateOutput();
+    button.append(title, description);
+    button.addEventListener("click", () => {
+      selectStyle(index);
+      elements.mobileStyleDetails.open = false;
     });
 
-    const labelText = document.createElement("span");
-    labelText.textContent = normalized.label;
-    label.append(input, labelText);
-    fieldset.append(label);
+    elements.mobileStyleOptions.append(button);
   });
-
-  return fieldset;
 }
 
-function normalizeOption(option) {
-  if (typeof option === "string") {
-    return {
-      label: option,
-      value: option,
-    };
-  }
-
-  return {
-    label: option.label ?? option.value,
-    value: option.value ?? option.label,
-  };
-}
-
-function updatePresetState() {
-  elements.presetGrid.querySelectorAll(".preset-button").forEach((button) => {
-    button.setAttribute(
-      "aria-pressed",
-      String(button.dataset.presetId === state.activePresetId),
-    );
+function updateStyleSelection() {
+  elements.styleList.querySelectorAll(".style-button").forEach((button, index) => {
+    button.setAttribute("aria-pressed", String(index === state.selectedIndex));
   });
+  elements.mobileStyleOptions
+    .querySelectorAll(".mobile-style-option")
+    .forEach((button, index) => {
+      button.setAttribute("aria-pressed", String(index === state.selectedIndex));
+    });
 }
 
 function updateOutput() {
-  const prompt = renderTemplate(state.config.template, state.values);
-  elements.promptOutput.value = prompt;
-  const chars = prompt.length.toLocaleString("ja-JP");
-  const lines = prompt.split("\n").length.toLocaleString("ja-JP");
-  elements.promptStats.textContent = `${chars}文字 / ${lines}行`;
-}
+  const style = state.styles[state.selectedIndex];
 
-function renderTemplate(template, values) {
-  return template
-    .replace(/{{\s*([\w-]+)\s*}}/g, (_, key) => formatValue(values[key]))
-    .replace(/[ \t]+\n/g, "\n")
-    .trim();
-}
-
-function formatValue(value) {
-  if (Array.isArray(value)) {
-    return value.filter(Boolean).join(", ");
+  if (!style) {
+    elements.selectedTitle.textContent = "";
+    elements.mobileSelectedTitle.textContent = "";
+    elements.mobileSelectedDescription.textContent = "";
+    elements.lyricsPromptOutput.value = "";
+    elements.sunoPromptOutput.value = "";
+    return;
   }
 
-  if (typeof value === "boolean") {
-    return value ? "yes" : "no";
-  }
-
-  return String(value ?? "").trim();
+  elements.selectedTitle.textContent = getStyleTitle(style);
+  elements.mobileSelectedTitle.textContent = getStyleTitle(style);
+  elements.mobileSelectedDescription.textContent = style.description_ja ?? "";
+  elements.lyricsPromptOutput.value = `${style.prompt}\n\n${INSTRUCTION_TEXT}`;
+  elements.sunoPromptOutput.value = style.prompt;
+  autoResizeTextareas();
 }
 
-async function copyPrompt() {
-  const text = elements.promptOutput.value;
+function getStyleTitle(style) {
+  return style.title_ja;
+}
+
+function selectStyle(index) {
+  const style = state.styles[index];
+  state.selectedIndex = index;
+  updateStyleSelection();
+  updateOutput();
+  setStatus(`${getStyleTitle(style)} を選択しました。`, "success");
+}
+
+function autoResizeTextareas() {
+  [elements.lyricsPromptOutput, elements.sunoPromptOutput].forEach((textarea) => {
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight + 2}px`;
+  });
+}
+
+async function copyPrompt(textarea, successMessage) {
+  const text = textarea.value;
 
   if (!text) {
     setStatus("コピーする内容がありません。", "error");
@@ -330,36 +192,45 @@ async function copyPrompt() {
 
   try {
     await navigator.clipboard.writeText(text);
-    setStatus("コピーしました。", "success");
+    setStatus(successMessage, "success");
   } catch {
-    elements.promptOutput.select();
+    textarea.select();
     document.execCommand("copy");
-    elements.promptOutput.setSelectionRange(0, 0);
-    setStatus("コピーしました。", "success");
+    textarea.setSelectionRange(0, 0);
+    setStatus(successMessage, "success");
   }
 }
 
 function showLoading() {
-  elements.configName.textContent = "";
-  elements.presetGrid.innerHTML = "";
-  elements.promptForm.innerHTML = "";
-  elements.presetGrid.append(createEmptyState("読み込み中..."));
-  elements.promptOutput.value = "";
-  elements.promptStats.textContent = "";
+  elements.styleCount.textContent = "";
+  elements.styleList.innerHTML = "";
+  elements.mobileStyleOptions.innerHTML = "";
+  elements.styleList.append(createEmptyState("読み込み中..."));
+  elements.mobileSelectedTitle.textContent = "読み込み中...";
+  elements.mobileSelectedDescription.textContent = "";
+  elements.selectedTitle.textContent = "";
+  elements.lyricsPromptOutput.value = "";
+  elements.sunoPromptOutput.value = "";
+  autoResizeTextareas();
   setStatus("", "success");
 }
 
-function showError(error) {
-  elements.presetGrid.innerHTML = "";
-  elements.promptForm.innerHTML = "";
-  elements.presetGrid.append(createEmptyState("読み込み失敗"));
-  elements.promptOutput.value = error.message;
-  elements.promptStats.textContent = "";
+function showError(message) {
+  elements.styleCount.textContent = "";
+  elements.styleList.innerHTML = "";
+  elements.mobileStyleOptions.innerHTML = "";
+  elements.styleList.append(createEmptyState("読み込み失敗"));
+  elements.mobileSelectedTitle.textContent = "読み込み失敗";
+  elements.mobileSelectedDescription.textContent = "";
+  elements.selectedTitle.textContent = "";
+  elements.lyricsPromptOutput.value = message;
+  elements.sunoPromptOutput.value = "";
+  autoResizeTextareas();
   setStatus("JSONを確認してください。", "error");
 }
 
 function createEmptyState(message) {
-  const template = document.querySelector("#loadingTemplate");
+  const template = document.querySelector("#emptyTemplate");
   const node = template.content.firstElementChild.cloneNode(true);
   node.textContent = message;
   return node;
@@ -370,13 +241,12 @@ function setStatus(message, tone) {
   elements.statusLine.style.color = tone === "error" ? "#b62929" : "#197278";
 }
 
-elements.copyButton.addEventListener("click", copyPrompt);
-elements.resetButton.addEventListener("click", () => {
-  state.values = getInitialValues(state.config, state.activePresetId);
-  renderForm();
-  updateOutput();
-  setStatus("初期値に戻しました。", "success");
+elements.copyLyricsButton.addEventListener("click", () => {
+  copyPrompt(elements.lyricsPromptOutput, "歌詞生成用プロンプトをコピーしました。");
 });
-elements.reloadButton.addEventListener("click", loadConfig);
-
-loadConfig();
+elements.copySunoButton.addEventListener("click", () => {
+  copyPrompt(elements.sunoPromptOutput, "Suno用プロンプトをコピーしました。");
+});
+elements.lyricsPromptOutput.addEventListener("input", autoResizeTextareas);
+elements.sunoPromptOutput.addEventListener("input", autoResizeTextareas);
+loadStyles();
