@@ -260,6 +260,15 @@
       ],
       "description_ja": "友情・青春・ライブ感が爆発している日本ポップパンク。",
       "prompt": "Japanese pop punk anthem, energetic youthful male vocals, emotional friendship themes, fast upbeat guitars, festival singalong chorus, raw live performance energy, uplifting summer vibe"
+    },
+    {
+      "title": "Japanese Emotional Pop Rock",
+      "title_ja": "王道エモーショナルJ-POPロック",
+      "inspired_by": [
+        "Mr.Children"
+      ],
+      "description_ja": "優しさ・切なさ・希望感が混ざった、日本を代表する王道エモーショナルポップロック。",
+      "prompt": "Japanese emotional pop rock, gentle expressive male vocals, emotional melodic singing, uplifting bittersweet atmosphere, heartfelt lyrics feeling, warm band sound, nostalgic Japanese pop rock energy, emotional chorus build-up, soft but powerful vocal delivery"
     }
   ]
 }
