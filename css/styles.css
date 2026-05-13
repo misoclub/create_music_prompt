@@ -150,6 +150,7 @@ h2 {
   line-height: 1.4;
 }
 
+.prompt-options,
 .japan-options {
   display: grid;
   gap: 14px;

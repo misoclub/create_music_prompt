@@ -1,5 +1,6 @@
 const INSTRUCTION_TEXT = `というスタイルで曲を作りたいです。
 インドで流行るような英語の歌詞を考えてください。
+{{durationLine}}
 楽曲の生成はSunoで行います。
 ・曲名
 ・Sunoに渡す曲のスタイルのプロンプト
@@ -60,7 +61,7 @@ const state = {
   selectedIndex: 0,
   japanSongTitle: "",
   japanTheme: "",
-  japanDurationMinutes: "3",
+  durationMinutes: "3",
 };
 
 const elements = {
@@ -138,7 +139,7 @@ function render() {
 function renderThemeField() {
   elements.japanOptions.hidden = state.activeSourceId !== "japan";
   elements.songTitleInput.value = state.japanSongTitle;
-  elements.durationSelect.value = state.japanDurationMinutes;
+  elements.durationSelect.value = state.durationMinutes;
   elements.themeInput.value = state.japanTheme;
 }
 
@@ -281,20 +282,23 @@ function getActiveSource() {
 
 function getInstructionText() {
   const source = getActiveSource();
+  const durationLine = `なるべく${state.durationMinutes}分以内に収まる文章量でお願いします。`;
+  const instructionText = source.instructionText.replaceAll(
+    "{{durationLine}}",
+    durationLine,
+  );
 
   if (source.id !== "japan") {
-    return source.instructionText;
+    return instructionText;
   }
 
   const songTitle = state.japanSongTitle.trim();
   const theme = state.japanTheme.trim();
   const songTitleLine = songTitle ? `歌のタイトルは「${songTitle}」にしてください。` : "";
   const themeLine = theme ? `歌のテーマは「${theme}」です。` : "";
-  const durationLine = `なるべく${state.japanDurationMinutes}分以内に収まる文章量でお願いします。`;
-  return source.instructionText
+  return instructionText
     .replaceAll("{{songTitleLine}}\n", songTitleLine ? `${songTitleLine}\n` : "")
-    .replaceAll("{{themeLine}}\n", themeLine ? `${themeLine}\n` : "")
-    .replaceAll("{{durationLine}}", durationLine);
+    .replaceAll("{{themeLine}}\n", themeLine ? `${themeLine}\n` : "");
 }
 
 function renderSourceTabs() {
@@ -415,7 +419,7 @@ elements.songTitleInput.addEventListener("input", (event) => {
   updateOutput();
 });
 elements.durationSelect.addEventListener("change", (event) => {
-  state.japanDurationMinutes = event.target.value;
+  state.durationMinutes = event.target.value;
   updateOutput();
 });
 elements.themeInput.addEventListener("input", (event) => {
