@@ -132,6 +132,10 @@ h2 {
   flex: 0 0 auto;
 }
 
+.thumbnail-block {
+  flex: 0 0 auto;
+}
+
 .section-heading,
 .output-toolbar {
   display: flex;
@@ -294,6 +298,10 @@ h2 {
 
 #sunoPromptOutput {
   min-height: 110px;
+}
+
+#thumbnailPromptOutput {
+  min-height: 120px;
 }
 
 .status-line {

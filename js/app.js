@@ -32,6 +32,10 @@ const JAPAN_INSTRUCTION_TEXT = `というスタイルで曲を作りたいです
 コピペしやすいように簡単な説明以外にはコピーボタンをつけてください。
 あなたの感想は必要ないので、結果だけを出力してください。`;
 
+const THUMBNAIL_PROMPT_TEXT = `では、この曲のサムネイルを描いてください。
+歌詞の情報は絵を書くときの参考程度にとどめ、タイトル以外の文字は必要なとき以外使用しないでください。
+画像のサイズは９：１６でお願いします。`;
+
 const PROMPT_SOURCES = [
   {
     id: "india",
@@ -72,9 +76,11 @@ const elements = {
   selectedTitle: document.querySelector("#selectedTitle"),
   lyricsPromptOutput: document.querySelector("#lyricsPromptOutput"),
   sunoPromptOutput: document.querySelector("#sunoPromptOutput"),
+  thumbnailPromptOutput: document.querySelector("#thumbnailPromptOutput"),
   statusLine: document.querySelector("#statusLine"),
   copyLyricsButton: document.querySelector("#copyLyricsButton"),
   copySunoButton: document.querySelector("#copySunoButton"),
+  copyThumbnailButton: document.querySelector("#copyThumbnailButton"),
 };
 
 async function loadStyles() {
@@ -316,7 +322,11 @@ function selectStyle(index) {
 }
 
 function autoResizeTextareas() {
-  [elements.lyricsPromptOutput, elements.sunoPromptOutput].forEach((textarea) => {
+  [
+    elements.lyricsPromptOutput,
+    elements.sunoPromptOutput,
+    elements.thumbnailPromptOutput,
+  ].forEach((textarea) => {
     textarea.style.height = "auto";
     textarea.style.height = `${textarea.scrollHeight + 2}px`;
   });
@@ -391,8 +401,12 @@ elements.copyLyricsButton.addEventListener("click", () => {
 elements.copySunoButton.addEventListener("click", () => {
   copyPrompt(elements.sunoPromptOutput, "Suno用プロンプトをコピーしました。");
 });
+elements.copyThumbnailButton.addEventListener("click", () => {
+  copyPrompt(elements.thumbnailPromptOutput, "サムネイル用プロンプトをコピーしました。");
+});
 elements.lyricsPromptOutput.addEventListener("input", autoResizeTextareas);
 elements.sunoPromptOutput.addEventListener("input", autoResizeTextareas);
+elements.thumbnailPromptOutput.value = THUMBNAIL_PROMPT_TEXT;
 elements.songTitleInput.addEventListener("input", (event) => {
   state.japanSongTitle = event.target.value;
   updateOutput();
