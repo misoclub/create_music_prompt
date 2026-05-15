@@ -41,6 +41,10 @@ const THUMBNAIL_PROMPT_TEXT = `では、この曲のサムネイルを描いて�
 歌詞の情報は絵を書くときの参考程度にとどめ、タイトル以外の文字は必要なとき以外使用しないでください。
 画像のサイズは９：１６でお願いします。`;
 
+const NEXT_LYRICS_PROMPT_TEXT = `では次の曲の歌詞をお願いします。
+いままでとあまり同じ内容にならないようにしてください。
+必要であればスタイルは変えて構いません`;
+
 const PROMPT_SOURCES = [
   {
     id: "india",
@@ -82,10 +86,12 @@ const elements = {
   lyricsPromptOutput: document.querySelector("#lyricsPromptOutput"),
   sunoPromptOutput: document.querySelector("#sunoPromptOutput"),
   thumbnailPromptOutput: document.querySelector("#thumbnailPromptOutput"),
+  nextLyricsPromptOutput: document.querySelector("#nextLyricsPromptOutput"),
   statusLine: document.querySelector("#statusLine"),
   copyLyricsButton: document.querySelector("#copyLyricsButton"),
   copySunoButton: document.querySelector("#copySunoButton"),
   copyThumbnailButton: document.querySelector("#copyThumbnailButton"),
+  copyNextLyricsButton: document.querySelector("#copyNextLyricsButton"),
 };
 
 async function loadStyles() {
@@ -334,6 +340,7 @@ function autoResizeTextareas() {
     elements.lyricsPromptOutput,
     elements.sunoPromptOutput,
     elements.thumbnailPromptOutput,
+    elements.nextLyricsPromptOutput,
   ].forEach((textarea) => {
     textarea.style.height = "auto";
     textarea.style.height = `${textarea.scrollHeight + 2}px`;
@@ -412,9 +419,16 @@ elements.copySunoButton.addEventListener("click", () => {
 elements.copyThumbnailButton.addEventListener("click", () => {
   copyPrompt(elements.thumbnailPromptOutput, "サムネイル用プロンプトをコピーしました。");
 });
+elements.copyNextLyricsButton.addEventListener("click", () => {
+  copyPrompt(
+    elements.nextLyricsPromptOutput,
+    "次の曲の歌詞用プロンプトをコピーしました。",
+  );
+});
 elements.lyricsPromptOutput.addEventListener("input", autoResizeTextareas);
 elements.sunoPromptOutput.addEventListener("input", autoResizeTextareas);
 elements.thumbnailPromptOutput.value = THUMBNAIL_PROMPT_TEXT;
+elements.nextLyricsPromptOutput.value = NEXT_LYRICS_PROMPT_TEXT;
 elements.songTitleInput.addEventListener("input", (event) => {
   state.japanSongTitle = event.target.value;
   updateOutput();

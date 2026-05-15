@@ -136,6 +136,10 @@ h2 {
   flex: 0 0 auto;
 }
 
+.next-lyrics-block {
+  flex: 0 0 auto;
+}
+
 .section-heading,
 .output-toolbar {
   display: flex;
@@ -303,6 +307,10 @@ h2 {
 
 #thumbnailPromptOutput {
   min-height: 120px;
+}
+
+#nextLyricsPromptOutput {
+  min-height: 110px;
 }
 
 .status-line {

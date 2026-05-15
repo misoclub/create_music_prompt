@@ -140,6 +140,26 @@
           ></textarea>
         </div>
 
+        <div class="prompt-block next-lyrics-block">
+          <div class="output-toolbar">
+            <div>
+              <h2>次の曲の歌詞用プロンプト</h2>
+              <p class="meta-label">固定文言</p>
+            </div>
+            <button class="copy-button" id="copyNextLyricsButton" type="button">
+              <span aria-hidden="true">⧉</span>
+              コピー
+            </button>
+          </div>
+          <textarea
+            id="nextLyricsPromptOutput"
+            class="prompt-output"
+            spellcheck="false"
+            readonly
+            aria-label="次の曲の歌詞用プロンプト"
+          ></textarea>
+        </div>
+
         <p class="status-line" id="statusLine" role="status" aria-live="polite"></p>
       </section>
     </main>
