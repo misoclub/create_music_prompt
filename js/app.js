@@ -38,10 +38,16 @@ const JAPAN_INSTRUCTION_TEXT = `というスタイルを軸に曲を作りたい
 毎回同じプロンプトで生成しているので、今回はあなたならではのランダム性を入れて歌詞を考えてください。
 あなたの感想は必要ないので、結果だけを出力してください。`;
 
-const THUMBNAIL_PROMPT_TEXT = `では、この曲のサムネイルを描いてください。
+const INDIA_THUMBNAIL_PROMPT_TEXT = `では、この曲のサムネイルを描いてください。
 曲のタイトルは必ずいれてください。
 歌詞の情報は絵を書くときの参考程度にとどめ、タイトル以外の文字は必要なとき以外使用しないでください。
 画像のサイズは９：１６でお願いします。
+n=10`;
+
+const JAPAN_THUMBNAIL_PROMPT_TEXT = `では、この曲のサムネイルを描いてください。
+曲のタイトルは必ずいれてください。
+歌詞の情報は絵を書くときの参考程度にとどめ、タイトル以外の文字は必要なとき以外使用しないでください。
+画像のアスペクト比は１６：９でお願いします。
 n=10`;
 
 const NEXT_LYRICS_PROMPT_TEXT = `では次の曲の歌詞をお願いします。
@@ -54,12 +60,14 @@ const PROMPT_SOURCES = [
     label: "インド音楽",
     url: "./json/prompts.json",
     instructionText: INSTRUCTION_TEXT,
+    thumbnailPromptText: INDIA_THUMBNAIL_PROMPT_TEXT,
   },
   {
     id: "japan",
     label: "日本音楽",
     url: "./json/prompts_ja.json",
     instructionText: JAPAN_INSTRUCTION_TEXT,
+    thumbnailPromptText: JAPAN_THUMBNAIL_PROMPT_TEXT,
   },
 ];
 
@@ -143,6 +151,7 @@ function render() {
   renderThemeField();
   renderStyleList();
   renderMobileStyleOptions();
+  updateFixedPromptOutputs();
   updateOutput();
 }
 
@@ -290,6 +299,11 @@ function getActiveSource() {
   );
 }
 
+function updateFixedPromptOutputs() {
+  elements.thumbnailPromptOutput.value = getActiveSource().thumbnailPromptText;
+  elements.nextLyricsPromptOutput.value = NEXT_LYRICS_PROMPT_TEXT;
+}
+
 function getInstructionText() {
   const source = getActiveSource();
   const durationLine = `なるべく${state.durationMinutes}分以内に収まる文章量でお願いします。`;
@@ -381,6 +395,7 @@ function showLoading() {
   elements.selectedTitle.textContent = "";
   elements.lyricsPromptOutput.value = "";
   elements.sunoPromptOutput.value = "";
+  updateFixedPromptOutputs();
   autoResizeTextareas();
   setStatus("", "success");
 }
@@ -397,6 +412,7 @@ function showError(message) {
   elements.selectedTitle.textContent = "";
   elements.lyricsPromptOutput.value = message;
   elements.sunoPromptOutput.value = "";
+  updateFixedPromptOutputs();
   autoResizeTextareas();
   setStatus("JSONを確認してください。", "error");
 }
@@ -430,8 +446,7 @@ elements.copyNextLyricsButton.addEventListener("click", () => {
 });
 elements.lyricsPromptOutput.addEventListener("input", autoResizeTextareas);
 elements.sunoPromptOutput.addEventListener("input", autoResizeTextareas);
-elements.thumbnailPromptOutput.value = THUMBNAIL_PROMPT_TEXT;
-elements.nextLyricsPromptOutput.value = NEXT_LYRICS_PROMPT_TEXT;
+updateFixedPromptOutputs();
 elements.songTitleInput.addEventListener("input", (event) => {
   state.japanSongTitle = event.target.value;
   updateOutput();
